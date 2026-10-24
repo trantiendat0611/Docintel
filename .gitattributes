@@ -1,0 +1,4 @@
+# Lưu LF trong repo cho mọi file text. Tránh script CRLF bị lỗi khi chạy trong container Linux.
+* text=auto eol=lf
+*.png binary
+*.pdf binary
