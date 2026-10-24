@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.env
+data/raw/*
+data/parsed/*
+data/storage/
+!data/raw/.gitkeep
+!data/parsed/.gitkeep
+!data/manifest.csv
+eval/qa_test.jsonl
+*.egg-info/
