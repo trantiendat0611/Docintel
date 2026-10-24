@@ -6,10 +6,12 @@ requires-python = ">=3.12"
 dependencies = [
     "alembic>=1.20.1",
     "celery>=5.6.3",
+    "docling[easyocr]>=2.142.1",
     "fastapi>=0.162.0",
     "pgvector>=0.5.1",
     "psycopg[binary]>=3.3.6",
     "pydantic-settings>=2.16.1",
+    "python-multipart>=0.0.32",
     "redis>=8.1.0",
     "sqlalchemy>=2",
     "uvicorn[standard]>=0.54.0",
@@ -37,3 +39,7 @@ select = ["E", "F", "I", "UP", "B"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+# Test chạy Docling/OCR thật mất vài phút và cần tải model, nên không chạy mặc định
+# (và không chạy trong CI). Chạy riêng bằng: uv run pytest -m slow
+markers = ["slow: chạy parser và OCR thật"]
+addopts = "-m 'not slow'"

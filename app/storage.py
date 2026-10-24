@@ -4,7 +4,11 @@ Giao diện (put/get/delete theo key) giữ giống object storage kiểu S3 đ�
 MinIO sau này mà không sửa code gọi.
 """
 
+import json
+from functools import lru_cache
 from pathlib import Path
+
+from app.config import get_settings
 
 
 class LocalStorage:
@@ -27,3 +31,17 @@ class LocalStorage:
 
     def delete(self, key: str) -> None:
         self._path(key).unlink(missing_ok=True)
+
+    def exists(self, key: str) -> bool:
+        return self._path(key).is_file()
+
+    def put_json(self, key: str, payload: dict) -> None:
+        self.put(key, json.dumps(payload, ensure_ascii=False).encode("utf-8"))
+
+    def get_json(self, key: str) -> dict:
+        return json.loads(self.get(key).decode("utf-8"))
+
+
+@lru_cache
+def get_storage() -> LocalStorage:
+    return LocalStorage(get_settings().storage_dir)
