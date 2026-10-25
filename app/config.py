@@ -13,6 +13,8 @@ class Settings(BaseSettings):
 
     storage_dir: str = "data/storage"
     max_upload_mb: int = 50
+    max_pages: int = 500
+    job_timeout_seconds: int = 1800
 
     ollama_base_url: str = "http://localhost:11434"
     llm_answer_model: str = "qwen2.5:7b-instruct"

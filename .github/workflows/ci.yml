@@ -4,12 +4,30 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: docintel
+          POSTGRES_PASSWORD: docintel
+          POSTGRES_DB: docintel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U docintel"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      # Test tạo database docintel_test từ kết nối này.
+      DATABASE_URL: postgresql+psycopg://docintel:docintel@localhost:5432/docintel_test
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
       - run: uv sync --frozen
       - run: uv run ruff check .
       - run: uv run ruff format --check .
+      # Bỏ qua test đánh dấu slow: chúng tải model Docling/OCR và chạy vài phút trên CPU.
       - run: uv run pytest
 
   gitleaks:
