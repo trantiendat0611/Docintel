@@ -32,10 +32,20 @@ tách thật thì phải cắt PDF theo khoảng trang rồi ghép kết quả �
 
 ## Chưa quyết định
 
-Engine OCR vẫn là EasyOCR (`lang=["vi", "en"]`) làm mốc. Việc so sánh EasyOCR với
-Tesseract-vie và PaddleOCR-VL trên 20 trang scan, đo CER bằng `jiwer`, sẽ cập nhật vào ADR
-này. Mục tiêu gợi ý là CER dưới 5% với bản in rõ. Chưa có số đo nào, không được trích dẫn
-con số nào trong README cho tới khi có.
+Engine OCR vẫn là EasyOCR (`lang=["vi", "en"]`) làm mốc. Mục tiêu gợi ý là CER dưới 5% với
+bản in rõ. **Chưa có số đo nào**, không trích dẫn con số nào trong README cho tới khi có.
+
+Công cụ đo đã sẵn sàng (`scripts/ocr_benchmark.py`, hướng dẫn trong `eval/ocr/README.md`):
+
+```bash
+uv run python -m scripts.ocr_benchmark prepare data/raw/scans/*.pdf
+# gõ đáp án vào eval/ocr/pages/*.gt.txt
+uv run python -m scripts.ocr_benchmark run
+```
+
+Script đo CER, WER và thời gian mỗi trang, đồng thời báo thêm CER sau khi sắp xếp từ để
+tách lỗi nhận dạng khỏi lỗi thứ tự đọc. Khi có kết quả, dán bảng tổng hợp vào đây kèm lựa
+chọn và lý do.
 
 ## Dữ liệu scan để thử
 

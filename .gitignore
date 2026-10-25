@@ -12,3 +12,6 @@ data/storage/
 !data/manifest.csv
 eval/qa_test.jsonl
 *.egg-info/
+
+# Ảnh render lại được từ PDF gốc; đáp án .gt.txt thì giữ vì gõ tay
+eval/ocr/pages/*.png

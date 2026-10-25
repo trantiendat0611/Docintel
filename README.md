@@ -64,6 +64,17 @@ và chụp từng file. Vẫn nên có khoảng 10 bản chụp thật, vì nhi�
 Văn bản công khai tự tải vào `data/raw/` và thêm dòng vào `data/manifest.csv`.
 File trong `data/raw/` không được commit.
 
+## Thí nghiệm OCR
+
+```bash
+uv run python -m scripts.ocr_benchmark prepare data/raw/scans/*.pdf
+# gõ đáp án vào eval/ocr/pages/*.gt.txt
+uv run python -m scripts.ocr_benchmark run
+```
+
+Đo CER, WER và thời gian mỗi trang cho từng engine, báo cáo ra `eval/reports/ocr/`.
+Hướng dẫn chi tiết: `eval/ocr/README.md`. Kết quả chốt vào `docs/adr/0002-ocr-routing.md`.
+
 ## Xem parser hiểu tài liệu thế nào
 
 ```bash

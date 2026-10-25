@@ -29,7 +29,8 @@ TABLES = ("ingest_progress", "blocks", "documents")
 
 def _admin_dsn() -> str:
     url = get_settings().database_url.replace("postgresql+psycopg://", "postgresql://")
-    return url.rsplit("/", 1)[0] + "/postgres"
+    # connect_timeout: không có nó thì Postgres tắt sẽ làm pytest treo thay vì skip.
+    return url.rsplit("/", 1)[0] + "/postgres?connect_timeout=3"
 
 
 def _ensure_database() -> None:
@@ -40,7 +41,7 @@ def _ensure_database() -> None:
             conn.execute(f'CREATE DATABASE "{name}"')
 
 
-@pytest.fixture(scope="session", autouse=True)
+@pytest.fixture(scope="session")
 def database() -> None:
     """Tạo database test và chạy migration. Bỏ qua cả nhóm test nếu Postgres không chạy."""
     try:
@@ -54,8 +55,11 @@ def database() -> None:
 
 
 @pytest.fixture
-def session():
-    """Session sạch cho mỗi test: xoá sạch bảng trước khi chạy."""
+def session(database):
+    """Session sạch cho mỗi test: xoá sạch bảng trước khi chạy.
+
+    Chỉ test nào yêu cầu fixture này mới cần Postgres; các test thuần logic chạy bình thường
+    khi chưa bật Docker."""
     with engine.begin() as connection:
         connection.execute(text(f"TRUNCATE {', '.join(TABLES)} RESTART IDENTITY CASCADE"))
     with SessionLocal() as db:
